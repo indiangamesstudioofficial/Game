@@ -3,99 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Indian Games Studio - Number Guessing Game</title>
+    <title>Simple Calculator</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #0b0f19;
-            color: #ffffff;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
             font-family: Arial, sans-serif;
-            text-align: center;
-            padding-top: 50px;
         }
-        .game-box {
-            background: #161b22;
-            border: 2px solid #3b82f6;
-            display: inline-block;
-            padding: 30px;
+
+        .calculator {
+            width: 320px;
+            background: #111827;
+            border-radius: 18px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border: 1px solid #374151;
+        }
+
+        .display {
+            width: 100%;
+            height: 70px;
+            margin-bottom: 20px;
+            padding: 15px;
+            font-size: 2rem;
+            text-align: right;
+            border: none;
             border-radius: 12px;
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+            background: #0b1220;
+            color: #fff;
+            outline: none;
         }
-        input {
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: none;
-            width: 150px;
-            text-align: center;
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
         }
+
         button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #3b82f6;
-            color: white;
+            padding: 18px 0;
+            font-size: 1.2rem;
             border: none;
-            border-radius: 5px;
+            border-radius: 12px;
             cursor: pointer;
-            margin-left: 10px;
+            transition: 0.2s ease;
+            background: #1f2937;
+            color: white;
         }
+
         button:hover {
-            background-color: #2563eb;
+            opacity: 0.9;
+            transform: translateY(-1px);
         }
-        #message {
-            margin-top: 20px;
-            font-size: 18px;
+
+        .operator {
+            background: #f59e0b;
+            color: #111827;
             font-weight: bold;
+        }
+
+        .equal {
+            background: #22c55e;
+            color: white;
+            grid-column: span 2;
+        }
+
+        .clear {
+            background: #ef4444;
+            color: white;
         }
     </style>
 </head>
 <body>
+    <div class="calculator">
+        <input type="text" class="display" id="display" disabled>
 
-    <div class="game-box">
-        <h2>🎮 Indian Games Studio 🎮</h2>
-        <p>1 se 10 ke beech ka ek number socha hai maine, use guess karo!</p>
-        
-        <input type="number" id="userGuess" min="1" max="10" placeholder="Enter number">
-        <button onclick="checkGuess()">Check</button>
-        
-        <p id="message"></p>
+        <div class="buttons">
+            <button class="clear" onclick="clearDisplay()">C</button>
+            <button onclick="deleteLast()">DEL</button>
+            <button class="operator" onclick="appendValue('/')">/</button>
+            <button class="operator" onclick="appendValue('*')">×</button>
+
+            <button onclick="appendValue('7')">7</button>
+            <button onclick="appendValue('8')">8</button>
+            <button onclick="appendValue('9')">9</button>
+            <button class="operator" onclick="appendValue('-')">-</button>
+
+            <button onclick="appendValue('4')">4</button>
+            <button onclick="appendValue('5')">5</button>
+            <button onclick="appendValue('6')">6</button>
+            <button class="operator" onclick="appendValue('+')">+</button>
+
+            <button onclick="appendValue('1')">1</button>
+            <button onclick="appendValue('2')">2</button>
+            <button onclick="appendValue('3')">3</button>
+            <button class="equal" onclick="calculate()">=</button>
+
+            <button onclick="appendValue('0')" style="grid-column: span 2;">0</button>
+            <button onclick="appendValue('.')">.</button>
+        </div>
     </div>
 
     <script>
-        // Random number 1 se 10 ke beech generate hoga
-        let targetNumber = Math.floor(Math.random() * 10) + 1;
-        let attempts = 0;
+        const display = document.getElementById('display');
 
-        function checkGuess() {
-            let userNum = parseInt(document.getElementById("userGuess").value);
-            let msg = document.getElementById("message");
+        function appendValue(value) {
+            display.value += value;
+        }
 
-            if (!userNum || userNum < 1 || userNum > 10) {
-                msg.style.color = "#f87171";
-                msg.textContent = "Kripya 1 se 10 ke beech valid number dalein!";
-                return;
-            }
+        function clearDisplay() {
+            display.value = '';
+        }
 
-            attempts++;
+        function deleteLast() {
+            display.value = display.value.slice(0, -1);
+        }
 
-            if (userNum === targetNumber) {
-                msg.style.color = "#4ade80";
-                msg.textContent = `🎉 Badhai ho! Sahi jawab ${attempts} attempts mein jeet gaye!`;
-                // Naya round start karne ke liye
-                setTimeout(() => {
-                    targetNumber = Math.floor(Math.random() * 10) + 1;
-                    attempts = 0;
-                    document.getElementById("userGuess").value = "";
-                    msg.textContent = "Naya game shuru ho gaya hai, firse guess karo!";
-                }, 4000);
-            } else if (userNum > targetNumber) {
-                msg.style.color = "#facc15";
-                msg.textContent = "📉 Bahut zyada hai! Thoda chhota number try karo.";
-            } else {
-                msg.style.color = "#facc15";
-                msg.textContent = "📈 Bahut kam hai! Thoda bada number try karo.";
+        function calculate() {
+            try {
+                const result = Function(`"use strict"; return (${display.value})`)();
+                display.value = Number.isFinite(result) ? result : 'Error';
+            } catch {
+                display.value = 'Error';
             }
         }
-    </script>
 
+        document.addEventListener('keydown', function (event) {
+            const key = event.key;
+
+            if (/^[0-9.+\-*/]$/.test(key)) {
+                appendValue(key);
+            } else if (key === 'Enter' || key === '=') {
+                calculate();
+            } else if (key === 'Backspace') {
+                deleteLast();
+            } else if (key === 'Escape') {
+                clearDisplay();
+            }
+        });
+    </script>
 </body>
 </html>
