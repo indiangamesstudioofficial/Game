@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Games Studio - Number Guessing Game</title>
+    <style>
+        body {
+            background-color: #0b0f19;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+        }
+        .game-box {
+            background: #161b22;
+            border: 2px solid #3b82f6;
+            display: inline-block;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            width: 150px;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        button:hover {
+            background-color: #2563eb;
+        }
+        #message {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-box">
+        <h2>🎮 Indian Games Studio 🎮</h2>
+        <p>1 se 10 ke beech ka ek number socha hai maine, use guess karo!</p>
+        
+        <input type="number" id="userGuess" min="1" max="10" placeholder="Enter number">
+        <button onclick="checkGuess()">Check</button>
+        
+        <p id="message"></p>
+    </div>
+
+    <script>
+        // Random number 1 se 10 ke beech generate hoga
+        let targetNumber = Math.floor(Math.random() * 10) + 1;
+        let attempts = 0;
+
+        function checkGuess() {
+            let userNum = parseInt(document.getElementById("userGuess").value);
+            let msg = document.getElementById("message");
+
+            if (!userNum || userNum < 1 || userNum > 10) {
+                msg.style.color = "#f87171";
+                msg.textContent = "Kripya 1 se 10 ke beech valid number dalein!";
+                return;
+            }
+
+            attempts++;
+
+            if (userNum === targetNumber) {
+                msg.style.color = "#4ade80";
+                msg.textContent = `🎉 Badhai ho! Sahi jawab ${attempts} attempts mein jeet gaye!`;
+                // Naya round start karne ke liye
+                setTimeout(() => {
+                    targetNumber = Math.floor(Math.random() * 10) + 1;
+                    attempts = 0;
+                    document.getElementById("userGuess").value = "";
+                    msg.textContent = "Naya game shuru ho gaya hai, firse guess karo!";
+                }, 4000);
+            } else if (userNum > targetNumber) {
+                msg.style.color = "#facc15";
+                msg.textContent = "📉 Bahut zyada hai! Thoda chhota number try karo.";
+            } else {
+                msg.style.color = "#facc15";
+                msg.textContent = "📈 Bahut kam hai! Thoda bada number try karo.";
+            }
+        }
+    </script>
+
+</body>
+</html>
